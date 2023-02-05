@@ -1,24 +1,26 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path'); // CommonJS
 
 module.exports = {
-  entry: {
-     app: './src/index.js',
-    print: './src/print.js',
-  },
-  devtool: 'inline-source-map',
-  devServer: {
-    static: './dist',
-   hot: true,
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      title: 'Hot Module Replacement',
-    }),
-  ],
+  mode: 'production',
+  entry: './frontend/main.js',
   output: {
-    filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'dist'),
-    clean: true,
+    path: path.resolve(__dirname, 'public', 'assets', 'js'),
+    filename: 'bundle.js'
   },
+  module: {
+    rules: [{
+      exclude: /node_modules/,
+      test: /\.js$/,
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: ['@babel/env']
+        }
+      }
+    }, {
+      test: /\.css$/,
+      use: ['style-loader', 'css-loader']
+    }]
+  },
+  devtool: 'source-map'
 };
